@@ -18,9 +18,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
+        'username',
         'password',
+        'role',
     ];
 
     /**
@@ -33,6 +33,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected $appends = ['company_name'];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -44,5 +46,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getCompanyNameAttribute()
+    {
+        return $this->company->name ?? 'No Company';
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
     }
 }
